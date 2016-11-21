@@ -937,6 +937,23 @@ moduleFor('Query Params - main', class extends QueryParamTestCase {
     });
   }
 
+  ['@test transitionTo supports query params from beforeModel hook'](assert) {
+    this.router.map(function() {
+      this.route('/');
+    });
+    this.setSingleQPController('index', 'foo', null);
+    this.registerRoute('index', Route.extend({
+      beforeModel(transition) {
+        if (!transition.state.queryParams.foo) {
+          this.transitionTo({ queryParams: { foo: 'bananas' } });
+        }
+      }
+    }));
+    return this.visitAndAssert('/').then(() => {
+      this.assertCurrentPath('/?foo=bananas', 'transitionTo called from beforeModel hook works');
+    });
+  }
+
   ['@test transitionTo supports query params (multiple)'](assert) {
     this.registerController('index', Controller.extend({
       queryParams: ['foo', 'bar'],
