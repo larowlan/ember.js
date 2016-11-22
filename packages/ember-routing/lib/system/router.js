@@ -836,9 +836,12 @@ const EmberRouter = EmberObject.extend(Evented, {
     @return {Object}
    */
   _queryParamsFor(handlerInfos) {
-    let leafRouteName = handlerInfos[handlerInfos.length - 1].name;
-    if (this._qpCache[leafRouteName]) {
-      return this._qpCache[leafRouteName];
+    let leafRouteName = false;
+    if (handlerInfos.length) {
+      leafRouteName = handlerInfos[handlerInfos.length - 1].name;
+      if (this._qpCache[leafRouteName]) {
+        return this._qpCache[leafRouteName];
+      }
     }
 
     let shouldCache = true;
@@ -876,7 +879,7 @@ const EmberRouter = EmberObject.extend(Evented, {
       map: map
     };
 
-    if (shouldCache) {
+    if (shouldCache && leafRouteName) {
       this._qpCache[leafRouteName] = finalQPMeta;
     }
 
@@ -1287,7 +1290,7 @@ function calculatePostTransitionState(emberRouter, leafRouteName, contexts) {
 
 function updatePaths(router) {
   let infos = router.router.currentHandlerInfos;
-  if (infos.length === 0) { return; }
+  if (!infos || infos.length === 0) { return; }
 
   let path = EmberRouter._routePath(infos);
   let currentRouteName = infos[infos.length - 1].name;

@@ -22,7 +22,7 @@ export function getActiveTargetName(router) {
 }
 
 export function stashParamNames(router, handlerInfos) {
-  if (handlerInfos._namesStashed) { return; }
+  if (handlerInfos._namesStashed || !handlerInfos.length) { return; }
 
   // This helper exists because router.js/route-recognizer.js awkwardly
   // keeps separate a handlerInfo's list of parameter names depending
