@@ -944,9 +944,7 @@ moduleFor('Query Params - main', class extends QueryParamTestCase {
     this.setSingleQPController('index', 'foo', null);
     this.registerRoute('index', Route.extend({
       beforeModel(transition) {
-        if (!transition.state.queryParams.foo) {
-          this.transitionTo({ queryParams: { foo: 'bananas' } });
-        }
+        this.transitionTo({ queryParams: { foo: 'bananas' } });
       }
     }));
     return this.visitAndAssert('/').then(() => {
